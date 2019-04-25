@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include "database.h"
+#include "mainwindowmodel.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -17,7 +19,6 @@ private slots:
     void on_actionQuitar_Aplicacion_triggered();
 
     void on_actionAgregar_triggered();
-
 
     void on_btnIngresar_clicked();
 
@@ -40,6 +41,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     database dbase;
+    mainwindowmodel * mModelMainWindow;
 
 };
 

@@ -30,6 +30,7 @@ SOURCES += \
         database.cpp \
         main.cpp \
         mainwindow.cpp \
+        mainwindowmodel.cpp \
         product.cpp \
         productmodel.cpp
 
@@ -38,6 +39,7 @@ HEADERS += \
         cajeromodel.h \
         database.h \
         mainwindow.h \
+        mainwindowmodel.h \
         product.h \
         productmodel.h
 

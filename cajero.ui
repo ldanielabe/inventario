@@ -215,17 +215,17 @@
     <string>Eliminar</string>
    </property>
   </widget>
-  <widget class="QDialogButtonBox" name="buttonBox_2">
+  <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
      <x>390</x>
-     <y>390</y>
-     <width>156</width>
+     <y>370</y>
+     <width>75</width>
      <height>23</height>
     </rect>
    </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   <property name="text">
+    <string>PushButton</string>
    </property>
   </widget>
   <action name="actionAgregar_Producto">
@@ -244,9 +244,9 @@
   <zorder>label_3</zorder>
   <zorder>label_4</zorder>
   <zorder>listWidget</zorder>
-  <zorder>buttonBox_2</zorder>
   <zorder>pushButton</zorder>
   <zorder>pushButton_2</zorder>
+  <zorder>pushButton_3</zorder>
  </widget>
  <resources/>
  <connections/>

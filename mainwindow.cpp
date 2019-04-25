@@ -9,8 +9,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    dbase("inventario","root","","localhost",3306)
-{
+    dbase("inventario","root","","localhost",3306){
     ui->setupUi(this);
 
     QString msjErr;
@@ -22,74 +21,50 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->CajeroRadioButton->setChecked(true);
 
-}
+    }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-/*void MainWindow::on_actionQuitar_Aplicacion_triggered()
-{
-    close();
-}
-*/
-
-/*void MainWindow::on_actionAgregar_triggered()
-{
-    product d(this);
-    d.exec();
-}*/
-
-void MainWindow::on_btnIngresar_clicked()
-{
-
-
-}
-
-
-
-void MainWindow::on_btnIngresar_pressed()
-{
-    QMessageBox::warning(this,"Aviso","holiii.");
-}
 
 void MainWindow::on_buttonBox_accepted()
 {
     QSqlQuery q;
     int cant;
+    QString user=ui->txtUser->text();
+    QString pass=ui->txtContra->text();
 
-    if(ui->CajeroRadioButton->isChecked()){
-        q.exec(QString("SELECT count(*) FROM usuario WHERE idusuario LIKE '%1' AND contra LIKE '%2' AND rol LIKE '%3'")
-               .arg(ui->txtUser->text())
-               .arg(ui->txtContra->text())
-               .arg("cajero"));
+    if(user.isEmpty()||pass.isEmpty()){
+        QMessageBox::warning(this,"Aviso","Faltan datos.");
+    }else {
+        if(ui->CajeroRadioButton->isChecked()){
 
-        q.next();
-        cant=q.value(0).toInt();
-        if(cant==0){
-            QMessageBox::warning(this,"Aviso","Usuario o contraseña incorrectos.");
-            return;
-        }else{
-            cajero d(this);
-            d.exec();
-        }
-    }else{
-        QSqlQuery q;
-        int cant;
-        q.exec(QString("SELECT count(*) FROM usuario WHERE idusuario LIKE '%1' AND contra LIKE '%2' AND rol LIKE '%3'")
-                   .arg(ui->txtUser->text())
-                   .arg(ui->txtContra->text())
-                   .arg("administrador"));
-
-            q.next();
-            cant=q.value(0).toInt();
+            mModelMainWindow=new mainwindowmodel();
+            mModelMainWindow->query(user,pass,"cajero");
+            cant=mModelMainWindow->consultaCant(user,pass,"cajero");
             if(cant==0){
                 QMessageBox::warning(this,"Aviso","Usuario o contraseña incorrectos.");
                 return;
             }else{
-                product d(this);
+                cajero d(this);
                 d.exec();
             }
-    }
+        }else{
+            QSqlQuery q;
+            int cant;
+
+                mModelMainWindow->query(user,pass,"administrador");
+                cant=mModelMainWindow->consultaCant(user,pass,"administrador");
+                if(cant==0){
+                    QMessageBox::warning(this,"Aviso","Usuario o contraseña incorrectos.");
+                    return;
+                }else{
+                    product d(this);
+                    d.exec();
+                }
+        }
+}
+
 }

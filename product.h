@@ -28,6 +28,7 @@ private slots:
 private:
     Ui::product *ui;
     QSqlTableModel * mModel;
+
 };
 
 #endif // PRODUCT_H

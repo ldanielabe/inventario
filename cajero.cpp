@@ -3,14 +3,16 @@
 #include <QSqlTableModel>
 #include <QSqlQuery>
 #include <QMessageBox>
-
+#include "cajeromodel.h"
+#include<bits/stdc++.h>
 cajero::cajero(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::cajero)
 {
     ui->setupUi(this);
     mModel=new QSqlTableModel(this);
-
+ QObject::connect(this,SIGNAL(toggled()),this,SLOT(on_pushButton_toggled(bool val)));
+ this->setObjectName(QString("MyWindowUFPS"));
 }
 
 cajero::~cajero()
@@ -19,55 +21,78 @@ cajero::~cajero()
 }
 
 
+void cajero::on_buttonBox_accepted()
+{
+
+}
+//AGG
+void cajero::on_pushButton_toggled(bool checked)
+{
+if(checked){cout<<"HolaMundo:)"<<endl;}
+}
+
+//DELETE
+void cajero::on_pushButton_2_toggled(bool checked)
+{
+if(checked){cout<<"HolaMundo:) 2"<<endl;}
+}
+
+
+void cajero::on_pushButton_3_toggled(bool checked)
+{
+    if(checked){
+    if(checked){cout<<"HolaMundo:) 3"<<endl;}
+    return;}
+}
+
+
 void cajero::on_pushButton_clicked()
 {
-  if(!ui->txtprod->text().isEmpty()&&!ui->txtcant->text().isEmpty()){
-   QSqlQuery q;
-   QSqlQuery q2;
-   QString cant;
-   q.exec(QString("SELECT * FROM producto WHERE nombreproducto LIKE '%1'").arg(ui->txtprod->text()));
-   q.next();
-   cant=q.value(5).toString();//Esta es la cantidad
+    if(!ui->txtprod->text().isEmpty()||!ui->txtcant->text().isEmpty()){
 
-   int sum=0;
-   if(cant.toInt()==0){
-       QMessageBox::warning(this,"Aviso","No existe este producto.");
-       return;
-   }else{
-    QString prod=ui->txtprod->text();
-    QString c=ui->txtcant->text();
+     mModelCajero=new cajeroModel();
+      QString cant;
+     cant=mModelCajero->consultaCant(ui->txtprod->text());
 
-        if(c.toInt()>=cant.toInt()){
-            QMessageBox::information(this,"Aviso","No existe la cantidad que solicita. Stock: "+ cant);
-            return;
-        }else{
-            ui->listWidget->addItem(QString(prod + "-Cantidad-" + QString(c)));
-            QStringList arrtot=ui->txttotal->text().split(" ");
+     int sum=0;
+     if(cant.toInt()==0){
+         QMessageBox::warning(this,"Aviso","No existe este producto.");
+         return;
+     }else{
+      QString prod=ui->txtprod->text();
+      QString c=ui->txtcant->text();
 
-            if(ui->txttotal->text()!=""){
-                 sum=arrtot.value(arrtot.length()-2).toInt()+(q.value(4).toString().toInt()*c.toInt());
-                }else {
-                sum=q.value(4).toString().toInt()*c.toInt();
-                }
+          if(c.toInt()>=cant.toInt()){
+              QMessageBox::information(this,"Aviso","No existe la cantidad que solicita. Stock: "+ cant);
+              return;
+          }else{
+              ui->listWidget->addItem(QString(prod + "-Cantidad-" + QString(c)));
+              QStringList arrtot=ui->txttotal->text().split(" ");
+
+              if(ui->txttotal->text()!=""){
+                   sum=arrtot.value(arrtot.length()-2).toInt()+(mModelCajero->consultaPrecio(prod)*c.toInt());
+                  }else {
+                  sum=mModelCajero->consultaPrecio(prod)*c.toInt();
+                  }
 
 
-            ui->txttotal->setText(QVariant(sum).toString()+" pesos");
-            ui->txttotal->show();
-            int res=cant.toInt()-c.toInt();
+              ui->txttotal->setText(QVariant(sum).toString()+" pesos");
+              ui->txttotal->show();
+              int res=cant.toInt()-c.toInt();
 
-            q2.exec("UPDATE producto SET cantidadExistente ='"+QVariant(res).toString()+"' WHERE nombreproducto ='"+prod+"'");
-        }
-        }
-   }else {
-      QMessageBox::information(this,"Aviso","Faltan datos.");
-      return;
-  }
+              mModelCajero->actualizar(QVariant(res).toString(),prod);
+          }
+          }
+     }else {
+        QMessageBox::information(this,"Aviso","Faltan datos.");
+        return;
+    }
 }
 
 void cajero::on_pushButton_2_clicked()
 {
-    QSqlQuery q2;
-    QSqlQuery q;
+
+
     QString cant;
 
     QList<QListWidgetItem*> items = ui->listWidget->selectedItems();
@@ -80,17 +105,12 @@ void cajero::on_pushButton_2_clicked()
 
         QString prod=arr.value(arr.length()-3);
 
-        q.exec(QString("SELECT * FROM producto WHERE nombreproducto LIKE '%1'").arg(prod));
-        q.next();
-        cant=q.value(5).toString();
-
-        q2.exec("UPDATE producto SET cantidadExistente ='"+QVariant(cant.toInt()+c).toString()+"' WHERE nombreproducto ='"+prod+"'");
+        cant=mModelCajero->consultaCant(prod);
+        mModelCajero->actualizar(QVariant(cant.toInt()+c).toString(),prod);
         QStringList arrtot=ui->txttotal->text().split(" ");
         if(ui->txttotal->text()!=""){
-             sum=arrtot.value(arrtot.length()-2).toInt()-(q.value(4).toString().toInt()*c);
+             sum=arrtot.value(arrtot.length()-2).toInt()-(mModelCajero->consultaPrecio(prod)*c);
             }
-
-
         ui->txttotal->setText(QVariant(sum).toString()+" Pesos");
 
         delete item;
@@ -98,25 +118,21 @@ void cajero::on_pushButton_2_clicked()
     ui->listWidget->selectAll();
 }
 
-
-void cajero::on_buttonBox_2_accepted()
+void cajero::on_pushButton_3_clicked()
 {
-     if(!ui->txtced->text().isEmpty()&&!ui->txtnombre->text().isEmpty()){
-    sum=0;
-    QMessageBox::information(this,"Reporte","Se vendio al cliente "+ ui->txtnombre->text()+" el total de: "+ui->txttotal->text());
-    ui->txttotal->setText("");
-    ui->txtced->setText("");
-    ui->txtnombre->setText("");
-    ui->txtprod->setText("");
-    ui->txtcant->setText("");
-    ui->listWidget->clear();
-     }else {
-         QMessageBox::information(this,"Aviso","Faltan datos.");
-         return;
-     }
+    if(!ui->txtced->text().isEmpty()&&!ui->txtnombre->text().isEmpty()){
+   sum=0;
+   QMessageBox::information(this,"Reporte","Se vendio al cliente "+ ui->txtnombre->text()+" el total de: "+ui->txttotal->text());
+   ui->txttotal->setText("");
+   ui->txtced->setText("");
+   ui->txtnombre->setText("");
+   ui->txtprod->setText("");
+   ui->txtcant->setText("");
+   ui->listWidget->clear();
+}else{
+        QMessageBox::information(this,"Aviso","Faltan datos.");
+        return;
+}
 }
 
-void cajero::on_buttonBox_2_rejected()
-{
-     close();
-}
+
