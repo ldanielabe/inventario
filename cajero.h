@@ -37,7 +37,7 @@ private slots:
 private:
     Ui::cajero *ui;
     QSqlTableModel * mModel;
-    cajeroModel * mModelCajero;
+    cajeroModel* mModelCajero;
     int sum=0;
 };
 

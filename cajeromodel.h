@@ -15,6 +15,7 @@ public:
     QString consultaCant(QString var);
     int consultaPrecio(QString var);
     void actualizar(QString s, QString p);
+    QSqlQuery queryprod();
 private:
 
 

@@ -22,7 +22,7 @@ private slots:
 
     void on_actionDelete_triggered();
 
-    void on_actionUpdate_triggered();
+
 
 
 private:

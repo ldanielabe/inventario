@@ -9,12 +9,14 @@ product::product(QWidget *parent) :
     mModel=new QSqlTableModel(this);
     mModel->setTable("Producto");
     mModel->select();
+
     mModel->setHeaderData(0,Qt::Horizontal,"ID");
     mModel->setHeaderData(1,Qt::Horizontal,"PRODUCTO");
     mModel->setHeaderData(2,Qt::Horizontal,"PROVEDOR");
     mModel->setHeaderData(3,Qt::Horizontal,"CATEGORIA");
     mModel->setHeaderData(4,Qt::Horizontal,"VALOR C/u");
     mModel->setHeaderData(5,Qt::Horizontal,"STOCK");
+    ui->tableView->hideColumn(0);
     ui->tableView->setModel(mModel);
     ui->tableView->addActions({ui->actionAdd,ui->actionDelete});
 

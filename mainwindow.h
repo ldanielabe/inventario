@@ -16,27 +16,12 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_actionQuitar_Aplicacion_triggered();
 
-    void on_actionAgregar_triggered();
-
-    void on_btnIngresar_clicked();
-
-    void on_btnIngresar_clicked(bool checked);
-
-    void on_btnIngresar_pressed();
-
-    void on_btnIngresar_customContextMenuRequested(const QPoint &pos);
+    void on_buttonBox_accepted();
 
     void on_btnIngresar_toggled(bool checked);
 
-    void on_checkBoxAdmin_stateChanged(int arg1);
-
-    void on_AdminRadioButton_clicked();
-
-    void on_CajeroRadioButton_clicked();
-
-    void on_buttonBox_accepted();
+    void on_btnIngresar_clicked();
 
 private:
     Ui::MainWindow *ui;

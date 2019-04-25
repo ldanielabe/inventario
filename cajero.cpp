@@ -10,13 +10,24 @@ cajero::cajero(QWidget *parent) :
     ui(new Ui::cajero)
 {
     ui->setupUi(this);
-    mModel=new QSqlTableModel(this);
- QObject::connect(this,SIGNAL(toggled()),this,SLOT(on_pushButton_toggled(bool val)));
- this->setObjectName(QString("MyWindowUFPS"));
+   mModel=new QSqlTableModel(this);
+// QObject::connect(this,SIGNAL(toggled()),this,SLOT(on_pushButton_toggled(bool val)));
+// this->setObjectName(QString("MyWindowUFPS"));
+   mModelCajero=new cajeroModel();
+
+   QSqlQuery q=mModelCajero->queryprod();
+ui->comboBox->addItem(QVariant(q.value(1).toString()).toString());
+   while (q.next()) {
+   ui->comboBox->addItem(QVariant(q.value(1).toString()).toString());
+   }
+
+
 }
 
 cajero::~cajero()
 {
+
+
     delete ui;
 }
 
@@ -48,22 +59,35 @@ void cajero::on_pushButton_3_toggled(bool checked)
 
 void cajero::on_pushButton_clicked()
 {
-    if(!ui->txtprod->text().isEmpty()||!ui->txtcant->text().isEmpty()){
+    if(!ui->txtcant->text().isEmpty()){
 
      mModelCajero=new cajeroModel();
       QString cant;
-     cant=mModelCajero->consultaCant(ui->txtprod->text());
+     cant=mModelCajero->consultaCant(ui->comboBox->currentText());
 
      int sum=0;
      if(cant.toInt()==0){
          QMessageBox::warning(this,"Aviso","No existe este producto.");
          return;
      }else{
-      QString prod=ui->txtprod->text();
+      QString prod=ui->comboBox->currentText();
       QString c=ui->txtcant->text();
+     //Verificar
+      int intcantidad; //declaro una variable tipo entero
+      bool check;
+      intcantidad=c.toInt(&check);
+      if(!check){
+      QMessageBox::warning(this, "Error tipo de dato", "Porfavor digite un numero");
+      ui->txtcant->setText("");
+      return;
+      }
+
 
           if(c.toInt()>=cant.toInt()){
               QMessageBox::information(this,"Aviso","No existe la cantidad que solicita. Stock: "+ cant);
+              return;
+          }else if(c.toInt()<=0){
+              QMessageBox::information(this,"Aviso","Valor invalido.");
               return;
           }else{
               ui->listWidget->addItem(QString(prod + "-Cantidad-" + QString(c)));
@@ -92,7 +116,10 @@ void cajero::on_pushButton_clicked()
 void cajero::on_pushButton_2_clicked()
 {
 
+if(ui->txttotal->text().isEmpty()){
+    QMessageBox::information(this,"ERROR","No ha agregado ningun producto.");
 
+}else{
     QString cant;
 
     QList<QListWidgetItem*> items = ui->listWidget->selectedItems();
@@ -117,16 +144,16 @@ void cajero::on_pushButton_2_clicked()
     }
     ui->listWidget->selectAll();
 }
+}
 
 void cajero::on_pushButton_3_clicked()
 {
-    if(!ui->txtced->text().isEmpty()&&!ui->txtnombre->text().isEmpty()){
+    if(!ui->txtced->text().isEmpty()||!ui->txtnombre->text().isEmpty()){
    sum=0;
    QMessageBox::information(this,"Reporte","Se vendio al cliente "+ ui->txtnombre->text()+" el total de: "+ui->txttotal->text());
    ui->txttotal->setText("");
    ui->txtced->setText("");
    ui->txtnombre->setText("");
-   ui->txtprod->setText("");
    ui->txtcant->setText("");
    ui->listWidget->clear();
 }else{

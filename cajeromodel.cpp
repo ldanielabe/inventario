@@ -33,3 +33,11 @@ void cajeroModel::actualizar(QString s, QString p)
   q2.exec("UPDATE producto SET cantidadExistente ='"+s+"' WHERE nombreproducto ='"+p+"'");
 
 }
+
+QSqlQuery cajeroModel::queryprod()
+{
+    QSqlQuery query;
+    query.exec(QString("SELECT * FROM producto"));
+    query.next();
+    return query;
+}

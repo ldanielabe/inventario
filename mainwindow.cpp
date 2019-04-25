@@ -31,6 +31,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_buttonBox_accepted()
 {
+
+
+}
+
+void MainWindow::on_btnIngresar_toggled(bool checked)
+{
+ QMessageBox::warning(this,"Aviso","Holiiiiii");
+}
+
+void MainWindow::on_btnIngresar_clicked()
+{
     QSqlQuery q;
     int cant;
     QString user=ui->txtUser->text();
@@ -66,5 +77,4 @@ void MainWindow::on_buttonBox_accepted()
                 }
         }
 }
-
 }

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>678</width>
+    <width>761</width>
     <height>329</height>
    </rect>
   </property>
@@ -20,9 +20,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>30</y>
-     <width>661</width>
-     <height>291</height>
+     <y>50</y>
+     <width>611</width>
+     <height>271</height>
     </rect>
    </property>
    <property name="contextMenuPolicy">
@@ -33,7 +33,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>0</y>
+     <y>10</y>
      <width>181</width>
      <height>31</height>
     </rect>
@@ -47,6 +47,39 @@
    <property name="text">
     <string>Administrador</string>
    </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>50</y>
+     <width>120</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Categoria PRODUCTO</string>
+   </property>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>101</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>1. Bebidas
+2. Carnes
+3. Verduras
+4. Lacteos
+5. Granos
+6. Frutas
+7. Aseo
+8. Otros</string>
+    </property>
+   </widget>
   </widget>
   <action name="actionAdd">
    <property name="text">
